@@ -278,48 +278,122 @@
     margin-top: auto;
   }
 
-  /* WHAT YOU NEED */
-  .needs-list {
-    list-style: none;
-    border-top: 1px solid var(--line);
-  }
-  .needs-list li {
-    display: grid;
-    grid-template-columns: 32px 1fr;
-    gap: 20px;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--line);
-    align-items: baseline;
-  }
-  .needs-list .marker {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 1px;
-    color: var(--accent);
-  }
-  .needs-list .need {
-    font-size: 16px;
-    line-height: 1.5;
-    color: var(--cream);
-  }
-  .needs-list .need strong {
-    font-family: var(--display);
-    font-weight: 600;
-    color: var(--cream);
-  }
-  .needs-list .need .meta {
+  /* WHAT YOU NEED — BUILD MODULES */
+  .section-sub {
+    font-size: 17px;
     color: var(--cream-60);
+    line-height: 1.5;
+    margin-top: -28px;
+    margin-bottom: 48px;
+    max-width: 640px;
   }
-  .build-note {
-    margin-top: 32px;
-    padding: 22px 26px;
-    border-left: 3px solid var(--accent);
+  .build-modules {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .module-card {
     background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 32px 36px;
+    transition: border-color 200ms ease;
+  }
+  .module-card:hover { border-color: var(--line-2); }
+  .module-head {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 24px;
+    align-items: baseline;
+    margin-bottom: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .module-num {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -2px;
+  }
+  .module-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.4px;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+  .module-time {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(212,255,59,0.4);
+    padding: 6px 12px;
+    background: rgba(212,255,59,0.06);
+    white-space: nowrap;
+  }
+  .module-desc {
     font-size: 15px;
     color: var(--cream-60);
     line-height: 1.55;
+    margin-bottom: 20px;
+    font-style: italic;
   }
-  .build-note strong { color: var(--cream); font-weight: 600; }
+  .module-steps {
+    list-style: none;
+    counter-reset: stepCounter;
+  }
+  .module-steps li {
+    counter-increment: stepCounter;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: flex-start;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--cream);
+  }
+  .module-steps li:last-child { border-bottom: none; }
+  .module-steps li::before {
+    content: counter(stepCounter, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--accent);
+    padding-top: 3px;
+  }
+  .module-steps li a {
+    color: var(--accent);
+    border-bottom: 1px solid rgba(212,255,59,0.4);
+    transition: border-color 180ms ease;
+  }
+  .module-steps li a:hover { border-color: var(--accent); }
+  .module-steps li code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--bg-3);
+    padding: 2px 6px;
+    color: var(--accent);
+    border: 1px solid var(--line);
+  }
+  .build-note {
+    margin-top: 32px;
+    padding: 28px 32px;
+    border-left: 3px solid var(--accent);
+    background: var(--bg-2);
+    font-size: 16px;
+    color: var(--cream);
+    line-height: 1.6;
+  }
+  .build-note strong { color: var(--accent); font-weight: 700; font-family: var(--display); }
+  .build-note p + p { margin-top: 10px; }
+  .build-note .small { font-size: 14px; color: var(--cream-60); }
 
   /* CTA */
   .cta-section {
@@ -403,6 +477,12 @@
     .cta-section { padding: 72px 0 88px; }
     h1.hero-headline { font-size: 38px; letter-spacing: -1px; }
     h2.section-heading { font-size: 30px; letter-spacing: -0.5px; }
+    .section-sub { margin-top: -20px; margin-bottom: 32px; font-size: 15px; }
+    .module-card { padding: 24px 22px; }
+    .module-head { grid-template-columns: 60px 1fr; gap: 16px; }
+    .module-num { font-size: 40px; }
+    .module-title { font-size: 19px; letter-spacing: -0.2px; }
+    .module-time { grid-column: 2 / -1; justify-self: start; margin-top: 6px; }
   }
   @media (max-width: 480px) {
     .nav-meta { display: none; }
@@ -417,9 +497,16 @@
     .step-num { font-size: 32px; letter-spacing: -1px; }
     .step-title { font-size: 18px; }
     .step-detail { font-size: 14px; }
-    .needs-list li { grid-template-columns: 28px 1fr; gap: 14px; padding: 16px 0; }
-    .needs-list .need { font-size: 14px; }
-    .build-note { padding: 18px 20px; font-size: 14px; }
+    .module-card { padding: 22px 18px; }
+    .module-head { grid-template-columns: 44px 1fr; gap: 12px; padding-bottom: 14px; margin-bottom: 14px; }
+    .module-num { font-size: 32px; letter-spacing: -1px; }
+    .module-title { font-size: 17px; }
+    .module-time { font-size: 10px; padding: 5px 10px; letter-spacing: 1.2px; }
+    .module-desc { font-size: 14px; margin-bottom: 14px; }
+    .module-steps li { font-size: 14px; padding: 10px 0; grid-template-columns: 28px 1fr; gap: 10px; }
+    .module-steps li::before { font-size: 10px; }
+    .module-steps li code { font-size: 12px; }
+    .build-note { padding: 20px 22px; font-size: 14px; }
     .btn { padding: 16px 26px; font-size: 14px; width: 100%; justify-content: center; }
     .cta-body { font-size: 15px; }
     h2.section-heading { font-size: 26px; }
@@ -561,32 +648,102 @@
 <!-- WHAT YOU NEED -->
 <section class="section">
   <div class="wrap">
-    <div class="section-tag">04 · What you need</div>
-    <h2 class="section-heading">What it takes to build this.</h2>
-    <ul class="needs-list">
-      <li>
-        <span class="marker">01</span>
-        <span class="need"><strong>WhatsApp Business account</strong> <span class="meta">connected to an automation tool such as Make, n8n, or Zapier.</span></span>
-      </li>
-      <li>
-        <span class="marker">02</span>
-        <span class="need"><strong>Airtable base</strong> <span class="meta">configured to log every customer interaction.</span></span>
-      </li>
-      <li>
-        <span class="marker">03</span>
-        <span class="need"><strong>Google Review link</strong> <span class="meta">for your business profile, ready to embed in the agent's reply.</span></span>
-      </li>
-      <li>
-        <span class="marker">04</span>
-        <span class="need"><strong>AI model via API</strong> <span class="meta">Claude or GPT-4, used to write the review draft.</span></span>
-      </li>
-      <li>
-        <span class="marker">05</span>
-        <span class="need"><strong>Post-booking trigger</strong> <span class="meta">from your CRM or calendar tool, fires when the appointment closes.</span></span>
-      </li>
-    </ul>
+    <div class="section-tag">04 · What you need to build this</div>
+    <h2 class="section-heading">Five components.<br/>Then it runs itself.</h2>
+    <p class="section-sub">Each one takes less than an hour to set up. Follow them in order and you have a working agent by the end of the afternoon.</p>
+
+    <div class="build-modules">
+
+      <!-- 1 -->
+      <div class="module-card">
+        <div class="module-head">
+          <div class="module-num">01</div>
+          <div class="module-title">WhatsApp Business + Automation</div>
+          <div class="module-time">30 to 45 min</div>
+        </div>
+        <p class="module-desc">The pipe that sends and receives messages automatically.</p>
+        <ol class="module-steps">
+          <li>Go to <a href="https://business.whatsapp.com" target="_blank" rel="noopener">business.whatsapp.com</a> and create a WhatsApp Business account for your business number.</li>
+          <li>Sign up for Make at <a href="https://make.com" target="_blank" rel="noopener">make.com</a>. The free plan works to start.</li>
+          <li>Inside Make, search for the <code>WhatsApp Business</code> module and connect your account using the API key WhatsApp provides.</li>
+          <li>Test the connection by sending a message to yourself from inside Make.</li>
+        </ol>
+      </div>
+
+      <!-- 2 -->
+      <div class="module-card">
+        <div class="module-head">
+          <div class="module-num">02</div>
+          <div class="module-title">Airtable Base · Your Logging System</div>
+          <div class="module-time">20 min</div>
+        </div>
+        <p class="module-desc">Every conversation, sentiment, and outcome captured in one place you can audit.</p>
+        <ol class="module-steps">
+          <li>Go to <a href="https://airtable.com" target="_blank" rel="noopener">airtable.com</a> and create a free account.</li>
+          <li>Create a new base called <code>Review Agent</code>.</li>
+          <li>Add these columns: Customer Name, Phone Number, Date of Contact, Sentiment (positive / neutral / negative), Feedback Summary, Review Link Shared (yes/no), Next Steps, Do Not Contact (checkbox).</li>
+          <li>Inside Make, add an <code>Airtable</code> module and connect it using your Airtable API key, found under your account settings.</li>
+          <li>Every time the agent finishes a conversation, Make writes a row to this table automatically.</li>
+        </ol>
+      </div>
+
+      <!-- 3 -->
+      <div class="module-card">
+        <div class="module-head">
+          <div class="module-num">03</div>
+          <div class="module-title">Your Google Review Link</div>
+          <div class="module-time">5 min</div>
+        </div>
+        <p class="module-desc">The only link your customers will ever see.</p>
+        <ol class="module-steps">
+          <li>On your phone or desktop, search your business name on Google.</li>
+          <li>Click your business listing, then click <code>Reviews</code>.</li>
+          <li>Click <code>Get more reviews</code> and copy the link Google gives you.</li>
+          <li>Paste it into your Make scenario wherever the agent shares the review link.</li>
+        </ol>
+      </div>
+
+      <!-- 4 -->
+      <div class="module-card">
+        <div class="module-head">
+          <div class="module-num">04</div>
+          <div class="module-title">AI Model via API · Claude or GPT-4</div>
+          <div class="module-time">45 to 60 min</div>
+        </div>
+        <p class="module-desc">The brain that reads the customer's message, asks the right questions, and drafts the review.</p>
+        <ol class="module-steps">
+          <li>Go to <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> or <a href="https://platform.openai.com" target="_blank" rel="noopener">platform.openai.com</a> and create an account.</li>
+          <li>Generate an API key from your account dashboard.</li>
+          <li>Inside Make, add an <code>HTTP</code> module — not a specific WhatsApp or Airtable module, just a plain HTTP request.</li>
+          <li>Set the URL to the API endpoint. Anthropic and OpenAI both show this in their docs.</li>
+          <li>Paste your API key into the authorisation header.</li>
+          <li>Write your agent instructions in the prompt field. This is where you tell the AI how to respond, what questions to ask, and how to draft the review.</li>
+          <li>The AI reads the customer's message, generates a reply, and sends it back through Make to WhatsApp.</li>
+        </ol>
+      </div>
+
+      <!-- 5 -->
+      <div class="module-card">
+        <div class="module-head">
+          <div class="module-num">05</div>
+          <div class="module-title">Post-Booking Trigger</div>
+          <div class="module-time">20 to 30 min</div>
+        </div>
+        <p class="module-desc">The signal that fires the agent the moment an appointment finishes.</p>
+        <ol class="module-steps">
+          <li>If you use Calendly: inside Make, add a <code>Calendly</code> module and trigger when a booking is marked complete.</li>
+          <li>If you use Google Calendar: add a <code>Google Calendar</code> module and trigger when an event ends.</li>
+          <li>If you use a CRM like HubSpot or GoHighLevel: use their Make module and trigger on <code>appointment completed</code> or the equivalent status.</li>
+          <li>Connect this trigger to the WhatsApp module so the message fires automatically after the appointment finishes.</li>
+          <li>Set a delay of 30 to 60 minutes so the message arrives once the customer has had time to settle, not the second they walk out.</li>
+        </ol>
+      </div>
+
+    </div>
+
     <div class="build-note">
-      <strong>Build estimate:</strong> if you have a developer, this takes roughly 8 to 12 hours to build and test.
+      <p><strong>Total build time, first-timer:</strong> 3 to 4 hours.</p>
+      <p class="small">If you have a developer, closer to 90 minutes. If you want none of this, scroll down.</p>
     </div>
   </div>
 </section>
