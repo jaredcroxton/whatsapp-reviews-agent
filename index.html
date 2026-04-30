@@ -92,6 +92,55 @@
   .hero {
     padding: 96px 0 80px;
     border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    background:
+      radial-gradient(circle at 18% 30%, rgba(212,255,59,0.12) 0%, transparent 45%),
+      radial-gradient(circle at 80% 75%, rgba(212,255,59,0.07) 0%, transparent 50%);
+    pointer-events: none;
+    animation: heroDrift 18s ease-in-out infinite;
+    z-index: 0;
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  @keyframes heroDrift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(30px, -20px) scale(1.05); }
+  }
+  .brand .dot { animation: brandPulse 2.4s ease-in-out infinite; }
+  @keyframes brandPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.55; transform: scale(1.2); }
+  }
+  .label .pulse { animation: brandPulse 1.8s ease-in-out infinite; }
+
+  /* Scroll-triggered fade-up */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-stagger.in > *:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 80ms;  }
+  .reveal-stagger.in > *:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 200ms; }
+  .reveal-stagger.in > *:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 320ms; }
+  .reveal-stagger.in > *:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 440ms; }
+  .reveal-stagger.in > *:nth-child(5) { opacity: 1; transform: translateY(0); transition-delay: 560ms; }
+  .reveal-stagger.in > *:nth-child(6) { opacity: 1; transform: translateY(0); transition-delay: 680ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; }
+    .hero::before { animation: none; }
+    .brand .dot, .label .pulse { animation: none; }
   }
   .label {
     display: inline-flex;
@@ -204,6 +253,8 @@
     transition: background 200ms ease;
   }
   .step:hover { background: rgba(245,234,219,0.02); }
+  .step:hover .step-num { color: var(--accent); transform: translateX(4px); text-shadow: 0 0 14px rgba(212,255,59,0.4); }
+  .step-num { transition: transform 260ms ease, text-shadow 260ms ease; }
   .step-num {
     font-family: var(--display);
     font-weight: 800;
@@ -296,9 +347,26 @@
     background: var(--bg-2);
     border: 1px solid var(--line);
     padding: 32px 36px;
-    transition: border-color 200ms ease;
+    transition: border-color 280ms ease, box-shadow 280ms ease, transform 280ms ease;
+    position: relative;
   }
-  .module-card:hover { border-color: var(--line-2); }
+  .module-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 0% 0%, rgba(212,255,59,0.08) 0%, transparent 40%);
+    opacity: 0;
+    transition: opacity 280ms ease;
+    pointer-events: none;
+  }
+  .module-card:hover {
+    border-color: rgba(212,255,59,0.32);
+    box-shadow: 0 18px 42px rgba(0,0,0,0.35), 0 0 0 1px rgba(212,255,59,0.08) inset;
+    transform: translateY(-2px);
+  }
+  .module-card:hover::before { opacity: 1; }
+  .module-card:hover .module-num { transform: translateX(2px); }
+  .module-num { transition: transform 280ms ease; }
   .module-head {
     display: grid;
     grid-template-columns: 80px 1fr auto;
@@ -350,14 +418,17 @@
   .module-steps li {
     counter-increment: stepCounter;
     display: grid;
-    grid-template-columns: 36px 1fr;
-    gap: 14px;
-    padding: 12px 0;
+    grid-template-columns: 36px minmax(0, 1fr);
+    column-gap: 14px;
+    row-gap: 10px;
+    padding: 14px 0;
     border-bottom: 1px solid var(--line);
     align-items: flex-start;
     font-size: 15px;
-    line-height: 1.55;
+    line-height: 1.6;
     color: var(--cream);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   .module-steps li:last-child { border-bottom: none; }
   .module-steps li::before {
@@ -366,22 +437,47 @@
     font-size: 11px;
     letter-spacing: 1px;
     color: var(--accent);
-    padding-top: 3px;
+    padding-top: 4px;
+    grid-column: 1;
+    grid-row: 1;
   }
+  .module-steps li .snippet { grid-column: 2; min-width: 0; }
   .module-steps li a {
     color: var(--accent);
     border-bottom: 1px solid rgba(212,255,59,0.4);
     transition: border-color 180ms ease;
+    word-break: break-word;
   }
   .module-steps li a:hover { border-color: var(--accent); }
   .module-steps li code {
+    display: inline-block;
     font-family: var(--mono);
-    font-size: 13px;
+    font-size: 12.5px;
     background: var(--bg-3);
-    padding: 2px 6px;
+    padding: 1px 7px;
     color: var(--accent);
     border: 1px solid var(--line);
+    border-radius: 3px;
+    white-space: nowrap;
+    vertical-align: baseline;
+    line-height: 1.5;
   }
+  .snippet {
+    display: block;
+    margin-top: 10px;
+    padding: 14px 18px;
+    background: var(--bg-3);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--cream);
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+  .snippet .placeholder { color: var(--accent); font-weight: 600; }
   .build-note {
     margin-top: 32px;
     padding: 28px 32px;
@@ -503,7 +599,8 @@
     .module-title { font-size: 17px; }
     .module-time { font-size: 10px; padding: 5px 10px; letter-spacing: 1.2px; }
     .module-desc { font-size: 14px; margin-bottom: 14px; }
-    .module-steps li { font-size: 14px; padding: 10px 0; grid-template-columns: 28px 1fr; gap: 10px; }
+    .module-steps li { font-size: 14px; padding: 10px 0; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; }
+    .snippet { padding: 12px 14px; font-size: 12px; line-height: 1.55; word-break: break-word; overflow-wrap: anywhere; }
     .module-steps li::before { font-size: 10px; }
     .module-steps li code { font-size: 12px; }
     .build-note { padding: 20px 22px; font-size: 14px; }
@@ -528,7 +625,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="wrap">
+  <div class="wrap reveal-stagger" data-reveal>
     <div class="label"><span class="pulse"></span>Powered by PerformOS</div>
     <h1 class="hero-headline">
       Turn every happy customer into a <span class="accent">5-star Google review.</span> Automatically.
@@ -543,8 +640,8 @@
 <section class="section">
   <div class="wrap">
     <div class="section-tag">01 · The problem</div>
-    <h2 class="section-heading">Most reviews never get written.</h2>
-    <div class="pain-grid">
+    <h2 class="section-heading reveal" data-reveal>Most reviews never get written.</h2>
+    <div class="pain-grid reveal-stagger" data-reveal>
       <div class="pain-card">
         <div class="pain-num">01</div>
         <div class="pain-text">Most businesses lose 80% of positive experiences to silence.</div>
@@ -565,8 +662,8 @@
 <section class="section">
   <div class="wrap">
     <div class="section-tag">02 · How it works</div>
-    <h2 class="section-heading">Six steps. Then it runs itself.</h2>
-    <div class="steps">
+    <h2 class="section-heading reveal" data-reveal>Six steps. Then it runs itself.</h2>
+    <div class="steps reveal-stagger" data-reveal>
 
       <div class="step">
         <div class="step-num">01</div>
@@ -624,8 +721,8 @@
 <section class="section">
   <div class="wrap">
     <div class="section-tag">03 · What you get</div>
-    <h2 class="section-heading">Three outcomes, every week.</h2>
-    <div class="outcomes">
+    <h2 class="section-heading reveal" data-reveal>Three outcomes, every week.</h2>
+    <div class="outcomes reveal-stagger" data-reveal>
       <div class="outcome">
         <div class="outcome-icon">★</div>
         <div class="outcome-title">More Google reviews, faster.</div>
@@ -649,10 +746,10 @@
 <section class="section">
   <div class="wrap">
     <div class="section-tag">04 · What you need to build this</div>
-    <h2 class="section-heading">Five components.<br/>Then it runs itself.</h2>
-    <p class="section-sub">Each one takes less than an hour to set up. Follow them in order and you have a working agent by the end of the afternoon.</p>
+    <h2 class="section-heading reveal" data-reveal>Five components.<br/>Then it runs itself.</h2>
+    <p class="section-sub reveal" data-reveal>Each one takes less than an hour to set up. Follow them in order and you have a working agent by the end of the afternoon.</p>
 
-    <div class="build-modules">
+    <div class="build-modules reveal-stagger" data-reveal>
 
       <!-- 1 -->
       <div class="module-card">
@@ -741,7 +838,7 @@
 
     </div>
 
-    <div class="build-note">
+    <div class="build-note reveal" data-reveal>
       <p><strong>Total build time, first-timer:</strong> 3 to 4 hours.</p>
       <p class="small">If you have a developer, closer to 90 minutes. If you want none of this, scroll down.</p>
     </div>
@@ -751,7 +848,7 @@
 <!-- CTA -->
 <section class="cta-section">
   <div class="wrap">
-    <div class="cta-inner">
+    <div class="cta-inner reveal-stagger" data-reveal>
       <div class="section-tag">05 · Or have us build it</div>
       <h2 class="section-heading">Rather have us <span class="accent">build it for you?</span></h2>
       <p class="cta-body">
@@ -773,6 +870,28 @@
     <span>WhatsApp Review Agent · 2026</span>
   </div>
 </footer>
+
+<script>
+  /* Scroll-triggered reveal animations.
+     Adds .in to any [data-reveal] element when it enters the viewport. */
+  (function () {
+    var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var targets = document.querySelectorAll('[data-reveal]');
+    if (prefersReduce || !('IntersectionObserver' in window)) {
+      targets.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    targets.forEach(function (el) { io.observe(el); });
+  })();
+</script>
 
 </body>
 </html>
